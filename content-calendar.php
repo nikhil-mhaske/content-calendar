@@ -175,7 +175,11 @@ add_action('admin_menu', 'cc_add_menu_pages');
 
 function content_calendar_callback()
 {
-	echo "Content Calendar Page";
+	?>
+	<h1><?php esc_html_e(get_admin_page_title()); ?></h1>
+	<?php
+	schedule_content_callback();
+	view_schedule_callback();
 }
 
 
@@ -219,6 +223,10 @@ function schedule_content_callback()
 
 function view_schedule_callback()
 {
+	?>
+	<h1><?php esc_html_e(get_admin_page_title()); ?></h1>
+	<?php
+	
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'cc_data';
   
