@@ -118,8 +118,36 @@ function content_calendar_callback() {
 
 
 function schedule_content_callback() {
-	echo "Schedule Content Page";
+	?>
+
+	<!--Add Input fields on Schedule Content Page-->
+	<div class="wrap">
+		<h1><?php esc_html_e(get_admin_page_title()); ?></h1>
+
+		<form action="" method="post">
+
+		<label for="day">Day:</label>
+		<input type="text" name="day" id="day" value="<?php echo esc_attr( get_option('day') ); ?>" /><br />
+
+		<label for="occasion">Occasion:</label>
+		<input type="text" name="occasion" id="occasion" value="<?php echo esc_attr( get_option('occasion') ); ?>" /><br />
+
+		<label for="post_title">Post Title:</label>
+		<input type="text" name="post_title" id="post_title" value="<?php echo esc_attr( get_option('post_title') ); ?>" /><br />
+
+		<label for="author">Author:</label>
+		<?php wp_dropdown_users( array( 'name' => 'author', 'selected' => get_option('author') ) ); ?><br />
+
+		<label for="reviewer">Reviewer:</label>
+		<input type="text" name="reviewer" id="reviewer" value="<?php echo esc_attr( get_option('reviewer') ); ?>" /><br />
+
+		<?php submit_button(); ?>
+		</form>
+	</div>
+
+	<?php
 }
+
 
 function view_schedule_callback() {
 	echo "View Schedule Page";
@@ -132,3 +160,5 @@ function run_content_calendar() {
 
 }
 run_content_calendar();
+
+?>
