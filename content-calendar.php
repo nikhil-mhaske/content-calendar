@@ -82,6 +82,32 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-content-calendar.php';
  * @since    1.0.0
  */
 
+//Create Database
+// Create a new database table
+function cc_create_table() {
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'cc_data';
+	$charset_collate = $wpdb->get_charset_collate();
+  
+	$sql = "CREATE TABLE $table_name (
+	  id mediumint(9) NOT NULL AUTO_INCREMENT,
+	  day varchar(255) NOT NULL,
+	  occasion varchar(255) NOT NULL,
+	  post_title varchar(255) NOT NULL,
+	  author int(11) NOT NULL,
+	  reviewer varchar(255) NOT NULL,
+	  PRIMARY KEY  (id)
+	) $charset_collate;";
+  
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+  }
+  
+  // Hook into the 'admin_init' action
+  add_action( 'admin_init', 'cc_create_table' );
+ 
+
+
 //Add Custom Menu Page
 function cc_add_menu_pages() {
 	add_menu_page(
@@ -152,6 +178,9 @@ function schedule_content_callback() {
 function view_schedule_callback() {
 	echo "View Schedule Page";
 }
+
+
+
 
 function run_content_calendar() {
 
