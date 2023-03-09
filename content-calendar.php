@@ -84,6 +84,9 @@ require plugin_dir_path(__FILE__) . 'includes/class-content-calendar.php';
  * @since    1.0.0
  */
 
+//enqueue CSS
+require plugin_dir_path(__FILE__) . 'scripts.php';
+
 //Create Database
 // Create a new database table
 function cc_create_table()
@@ -175,9 +178,9 @@ add_action('admin_menu', 'cc_add_menu_pages');
 
 function content_calendar_callback()
 {
-	?>
+?>
 	<h1><?php esc_html_e(get_admin_page_title()); ?></h1>
-	<?php
+<?php
 	schedule_content_callback();
 	view_schedule_callback();
 }
@@ -190,7 +193,7 @@ function schedule_content_callback()
 
 	<!--Add Input fields on Schedule Content Page-->
 	<div class="wrap">
-		<h1><?php esc_html_e(get_admin_page_title()); ?></h1>
+	<h1>Schedule Content</h1>
 
 
 		<form method="post">
@@ -207,28 +210,28 @@ function schedule_content_callback()
 
 			<label for="author">Author:</label>
 			<select name="author" id="author" required>
-                <?php
-                $users = get_users( array(
-                    'fields' => array( 'ID', 'display_name' )
-                ) );
-                foreach ( $users as $user ) {
-                    echo '<option value="' . $user->ID . '">' . $user->display_name . '</option>';
-                }
-                ?>
-            </select><br>
-			
+				<?php
+				$users = get_users(array(
+					'fields' => array('ID', 'display_name')
+				));
+				foreach ($users as $user) {
+					echo '<option value="' . $user->ID . '">' . $user->display_name . '</option>';
+				}
+				?>
+			</select><br>
+
 			<label for="reviewer">Reviewer:</label>
 			<select name="reviewer" id="reviewer" required>
-                <?php
-                $admins = get_users( array(
-                    'role' => 'administrator',
-                    'fields' => array( 'ID', 'display_name' )
-                ) );
-                foreach ( $admins as $admin ) {
-                    echo '<option value="' . $admin->ID . '">' . $admin->display_name . '</option>';
-                }
-                ?>
-            </select><br>
+				<?php
+				$admins = get_users(array(
+					'role' => 'administrator',
+					'fields' => array('ID', 'display_name')
+				));
+				foreach ($admins as $admin) {
+					echo '<option value="' . $admin->ID . '">' . $admin->display_name . '</option>';
+				}
+				?>
+			</select><br>
 
 			<?php submit_button('Schedule Post'); ?>
 
@@ -242,29 +245,29 @@ function schedule_content_callback()
 
 function view_schedule_callback()
 {
-	?>
-	<h1><?php esc_html_e(get_admin_page_title()); ?></h1>
-	<?php
-	
+?>
+	<h1>Scheduled Contents</h1>
+
+<?php
+
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'cc_data';
-  
-	$data = $wpdb->get_results( "SELECT * FROM $table_name" );
-  
+
+	$data = $wpdb->get_results("SELECT * FROM $table_name");
+
 	echo '<table>';
 	echo '<tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr>';
-	foreach ( $data as $row ) {
-	  echo '<tr>';
-	  echo '<td>' . $row->id . '</td>';
-	  echo '<td>' . $row->date . '</td>';
-	  echo '<td>' . $row->occasion . '</td>';
-	  echo '<td>' . $row->post_title . '</td>';
-	  echo '<td>' . get_userdata( $row->author )->user_login . '</td>';
-	  echo '<td>' . $row->reviewer . '</td>';
-	  echo '</tr>';
+	foreach ($data as $row) {
+		echo '<tr>';
+		echo '<td>' . $row->id . '</td>';
+		echo '<td>' . $row->date . '</td>';
+		echo '<td>' . $row->occasion . '</td>';
+		echo '<td>' . $row->post_title . '</td>';
+		echo '<td>' . get_userdata($row->author)->user_login . '</td>';
+		echo '<td>' . $row->reviewer . '</td>';
+		echo '</tr>';
 	}
 	echo '</table>';
-    
 }
 
 
