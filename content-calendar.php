@@ -206,10 +206,29 @@ function schedule_content_callback()
 			<input type="text" name="post_title" id="post_title" value="<?php echo esc_attr(get_option('post_title')); ?>" /><br />
 
 			<label for="author">Author:</label>
-			<?php wp_dropdown_users(array('name' => 'author', 'selected' => get_option('author'))); ?><br />
-
+			<select name="author" id="author" required>
+                <?php
+                $users = get_users( array(
+                    'fields' => array( 'ID', 'display_name' )
+                ) );
+                foreach ( $users as $user ) {
+                    echo '<option value="' . $user->ID . '">' . $user->display_name . '</option>';
+                }
+                ?>
+            </select><br>
+			
 			<label for="reviewer">Reviewer:</label>
-			<input type="text" name="reviewer" id="reviewer" value="<?php echo esc_attr(get_option('reviewer')); ?>" /><br />
+			<select name="reviewer" id="reviewer" required>
+                <?php
+                $admins = get_users( array(
+                    'role' => 'administrator',
+                    'fields' => array( 'ID', 'display_name' )
+                ) );
+                foreach ( $admins as $admin ) {
+                    echo '<option value="' . $admin->ID . '">' . $admin->display_name . '</option>';
+                }
+                ?>
+            </select><br>
 
 			<?php submit_button('Schedule Post'); ?>
 
