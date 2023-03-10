@@ -200,13 +200,13 @@ function schedule_content_callback()
 			<input type="hidden" name="action" value="cc_form">
 
 			<label for="date">Date:</label>
-			<input type="date" name="date" id="date" value="<?php echo esc_attr(get_option('date')); ?>" /><br />
+			<input type="date" name="date" id="date" value="<?php echo esc_attr(get_option('date')); ?>" required/><br />
 
 			<label for="occasion">Occasion:</label>
-			<input type="text" name="occasion" id="occasion" value="<?php echo esc_attr(get_option('occasion')); ?>" /><br />
+			<input type="text" name="occasion" id="occasion" value="<?php echo esc_attr(get_option('occasion')); ?>" required/><br />
 
 			<label for="post_title">Post Title:</label>
-			<input type="text" name="post_title" id="post_title" value="<?php echo esc_attr(get_option('post_title')); ?>" /><br />
+			<input type="text" name="post_title" id="post_title" value="<?php echo esc_attr(get_option('post_title')); ?>" required/><br />
 
 			<label for="author">Author:</label>
 			<select name="author" id="author" required>
@@ -253,10 +253,10 @@ function view_schedule_callback()
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'cc_data';
 
-	$data = $wpdb->get_results("SELECT * FROM $table_name");
+	$data = $wpdb->get_results("SELECT * FROM $table_name WHERE date >= DATE(NOW()) ORDER BY date");
 
 	echo '<table>';
-	echo '<tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr>';
+	echo '<thead><tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr></thead>';
 	foreach ($data as $row) {
 		echo '<tr>';
 		echo '<td>' . $row->id . '</td>';
@@ -264,7 +264,32 @@ function view_schedule_callback()
 		echo '<td>' . $row->occasion . '</td>';
 		echo '<td>' . $row->post_title . '</td>';
 		echo '<td>' . get_userdata($row->author)->user_login . '</td>';
-		echo '<td>' . $row->reviewer . '</td>';
+		echo '<td>' . get_userdata($row->reviewer)->user_login . '</td>';
+		echo '</tr>';
+	}
+	echo '</table>';
+
+
+	?>
+	<h1>Past Schedule</h1>
+
+<?php
+
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'cc_data';
+
+	$data = $wpdb->get_results("SELECT * FROM $table_name WHERE date < DATE(NOW()) ORDER BY date DESC");
+
+	echo '<table>';
+	echo '<thead><tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr></thead>';
+	foreach ($data as $row) {
+		echo '<tr>';
+		echo '<td>' . $row->id . '</td>';
+		echo '<td>' . $row->date . '</td>';
+		echo '<td>' . $row->occasion . '</td>';
+		echo '<td>' . $row->post_title . '</td>';
+		echo '<td>' . get_userdata($row->author)->user_login . '</td>';
+		echo '<td>' . get_userdata($row->reviewer)->user_login . '</td>';
 		echo '</tr>';
 	}
 	echo '</table>';
