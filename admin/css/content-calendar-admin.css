@@ -3,6 +3,15 @@
  * included in this file.
  */
 
+ /*Heading*/
+
+ .cc-title {
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 40px;
+ }
+
  body {
   background-color: whitesmoke;
   box-sizing: border-box;
@@ -61,65 +70,65 @@
 }
 
  /*Table CSS*/
- table {
+ #cc-table {
   border-collapse: collapse;
   text-align: center;
   width: 95%;
  }
 
- th{
+ #cc-table th{
   background-color: #222222;
   color: white;
  }
 
- th, td {
+ #cc-table th,#cc-table td {
   padding: 8px;
   font-size: 18px;
  }
 
- tr {
+ #cc-table tr {
   border-bottom: 1px solid #222;
  }
 
  @media screen and (max-width: 600px){
-  thead{
+  #cc-table thead{
     display: none;
   }
 
-  td{
+  #cc-table td{
     display: block;
   }
 
-  td:first-child{
+  #cc-table td:first-child{
     background-color: #222;
     color: #fff;
     text-align: center;
   }
   
-  td:nth-child(2)::before{
+  #cc-table td:nth-child(2)::before{
     content: "Date";
   }
 
-  td:nth-child(3)::before{
+  #cc-table td:nth-child(3)::before{
     content: "Occasion";
   }
 
-  td:nth-child(4)::before{
+  #cc-table td:nth-child(4)::before{
     content: "Post Title";
   }
 
-  td:nth-child(5)::before{
+  #cc-table td:nth-child(5)::before{
     content: "Author";
   }
-  td:nth-child(6)::before{
+  #cc-table td:nth-child(6)::before{
     content: "Reviewer";
   }
 
-  td{
+  #cc-table td{
     text-align: right;
   }
 
-  td::before{
+  #cc-table td::before{
     float: left;
     margin-right: 10px;
     font-weight: bold;

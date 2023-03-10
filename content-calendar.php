@@ -191,22 +191,22 @@ function schedule_content_callback()
 {
 ?>
 
+	<h1 class="cc-title">Schedule Content</h1>
 	<!--Add Input fields on Schedule Content Page-->
 	<div class="wrap">
-	<h1>Schedule Content</h1>
 
 
 		<form method="post">
 			<input type="hidden" name="action" value="cc_form">
 
 			<label for="date">Date:</label>
-			<input type="date" name="date" id="date" value="<?php echo esc_attr(get_option('date')); ?>" required/><br />
+			<input type="date" name="date" id="date" value="<?php echo esc_attr(get_option('date')); ?>" required /><br />
 
 			<label for="occasion">Occasion:</label>
-			<input type="text" name="occasion" id="occasion" value="<?php echo esc_attr(get_option('occasion')); ?>" required/><br />
+			<input type="text" name="occasion" id="occasion" value="<?php echo esc_attr(get_option('occasion')); ?>" required /><br />
 
 			<label for="post_title">Post Title:</label>
-			<input type="text" name="post_title" id="post_title" value="<?php echo esc_attr(get_option('post_title')); ?>" required/><br />
+			<input type="text" name="post_title" id="post_title" value="<?php echo esc_attr(get_option('post_title')); ?>" required /><br />
 
 			<label for="author">Author:</label>
 			<select name="author" id="author" required>
@@ -246,16 +246,16 @@ function schedule_content_callback()
 function view_schedule_callback()
 {
 ?>
-	<h1>Scheduled Contents</h1>
+	<h1 class="cc-title">Upcoming Scheduled Content</h1>
 
-<?php
+	<?php
 
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'cc_data';
 
 	$data = $wpdb->get_results("SELECT * FROM $table_name WHERE date >= DATE(NOW()) ORDER BY date");
 
-	echo '<table>';
+	echo '<table id="cc-table">';
 	echo '<thead><tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr></thead>';
 	foreach ($data as $row) {
 		echo '<tr>';
@@ -271,7 +271,7 @@ function view_schedule_callback()
 
 
 	?>
-	<h1>Past Schedule</h1>
+	<h1 class="cc-title">Deadline Closed Content</h1>
 
 <?php
 
@@ -280,7 +280,7 @@ function view_schedule_callback()
 
 	$data = $wpdb->get_results("SELECT * FROM $table_name WHERE date < DATE(NOW()) ORDER BY date DESC");
 
-	echo '<table>';
+	echo '<table id="cc-table">';
 	echo '<thead><tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr></thead>';
 	foreach ($data as $row) {
 		echo '<tr>';
