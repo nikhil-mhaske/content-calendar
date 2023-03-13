@@ -200,13 +200,13 @@ function schedule_content_callback()
 			<input type="hidden" name="action" value="cc_form">
 
 			<label for="date">Date:</label>
-			<input type="date" name="date" id="date" value="<?php echo esc_attr(get_option('date')); ?>" required /><br />
+			<input type="date" name="date" id="date" required /><br />
 
 			<label for="occasion">Occasion:</label>
-			<input type="text" name="occasion" id="occasion" value="<?php echo esc_attr(get_option('occasion')); ?>" required /><br />
+			<input type="text" name="occasion" id="occasion" required /><br />
 
 			<label for="post_title">Post Title:</label>
-			<input type="text" name="post_title" id="post_title" value="<?php echo esc_attr(get_option('post_title')); ?>" required /><br />
+			<input type="text" name="post_title" id="post_title" required /><br />
 
 			<label for="author">Author:</label>
 			<select name="author" id="author" required>
