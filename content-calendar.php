@@ -246,6 +246,7 @@ function schedule_content_callback()
 function view_schedule_callback()
 {
 ?>
+	<div class="wrap">
 	<h1 class="cc-title">Upcoming Scheduled Content</h1>
 
 	<?php
@@ -255,7 +256,7 @@ function view_schedule_callback()
 
 	$data = $wpdb->get_results("SELECT * FROM $table_name WHERE date >= DATE(NOW()) ORDER BY date");
 
-	echo '<table id="cc-table">';
+	echo '<table class="wp-list-table widefat fixed striped table-view-list">';
 	echo '<thead><tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr></thead>';
 	foreach ($data as $row) {
 		echo '<tr>';
@@ -280,7 +281,7 @@ function view_schedule_callback()
 
 	$data = $wpdb->get_results("SELECT * FROM $table_name WHERE date < DATE(NOW()) ORDER BY date DESC");
 
-	echo '<table id="cc-table">';
+	echo '<table class="wp-list-table widefat fixed striped table-view-list">';
 	echo '<thead><tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr></thead>';
 	foreach ($data as $row) {
 		echo '<tr>';
@@ -293,6 +294,7 @@ function view_schedule_callback()
 		echo '</tr>';
 	}
 	echo '</table>';
+	echo '</div>';
 }
 
 
