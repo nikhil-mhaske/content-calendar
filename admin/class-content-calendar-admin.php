@@ -133,6 +133,14 @@ class Content_Calendar_Admin
 
 
 	// Handle the form submission
+
+	public function my_form_submission_handler()
+	{
+		if (isset($_POST['submit'])) {
+			$this->cc_handle_form();
+		}
+	}
+
 	public function cc_handle_form()
 	{
 		global $wpdb;
@@ -158,17 +166,11 @@ class Content_Calendar_Admin
 	}
 
 
-	function my_form_submission_handler()
-	{
-		if (isset($_POST['submit'])) {
-			$this->cc_handle_form();
-		}
-	}
-
 	//Callback from Menu
 
 	public function schedule_content_callback()
 	{
+		//call to form
 		include('partials/content-calendar-admin-display.php');
 	}
 
