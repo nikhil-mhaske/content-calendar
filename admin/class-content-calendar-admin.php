@@ -20,7 +20,8 @@
  * @subpackage Content_Calendar/admin
  * @author     Nikhil Mhaske <nikhil.mhaske@wisdmlabs.com>
  */
-class Content_Calendar_Admin {
+class Content_Calendar_Admin
+{
 
 	/**
 	 * The ID of this plugin.
@@ -47,11 +48,11 @@ class Content_Calendar_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
 
 	/**
@@ -59,7 +60,8 @@ class Content_Calendar_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -73,8 +75,7 @@ class Content_Calendar_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/content-calendar-admin.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/content-calendar-admin.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -82,7 +83,8 @@ class Content_Calendar_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -96,38 +98,164 @@ class Content_Calendar_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/content-calendar-admin.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/content-calendar-admin.js', array('jquery'), $this->version, false);
 	}
 
 	//Add Custom Menu Page
-function cc_add_menu_pages()
-{
-	add_menu_page(
-		__('Content Calendar', 'content-calendar'),
-		'Content Calendar',
-		'manage_options',
-		'content-calendar',
-		'content_calendar_callback',
-		'dashicons-calendar-alt',
-		6
-	);
-	add_submenu_page(
-		'content-calendar',
-		__('Schedule Content', 'content-calendar'),
-		__('Schedule Content', 'content-calendar'),
-		'manage_options',
-		'schedule-content',
-		'schedule_content_callback'
-	);
-	add_submenu_page(
-		'content-calendar',
-		__('View Schedule', 'content-calendar'),
-		__('View Schedule', 'content-calendar'),
-		'manage_options',
-		'view-schedule',
-		'view_schedule_callback'
-	);
-}
+	function cc_add_menu_pages()
+	{
+		add_menu_page(
+			__('Content Calendar', 'content-calendar'),
+			'Content Calendar',
+			'manage_options',
+			'content-calendar',
+			array($this, 'content_calendar_callback'),
+			'dashicons-calendar-alt',
+			6
+		);
+		add_submenu_page(
+			'content-calendar',
+			__('Schedule Content', 'content-calendar'),
+			__('Schedule Content', 'content-calendar'),
+			'manage_options',
+			'schedule-content',
+			array($this, 'schedule_content_callback')
+		);
+		add_submenu_page(
+			'content-calendar',
+			__('View Schedule', 'content-calendar'),
+			__('View Schedule', 'content-calendar'),
+			'manage_options',
+			'view-schedule',
+			array($this, 'view_schedule_callback')
+		);
+	}
 
+
+	function my_form_submission_handler()
+	{
+		if (isset($_POST['submit'])) {
+			cc_handle_form();
+		}
+	}
+
+
+	public function schedule_content_callback()
+	{
+	?>
+
+		<h1 class="cc-title">Schedule Content</h1>
+		<!--Add Input fields on Schedule Content Page-->
+		<div class="wrap">
+
+
+			<form method="post">
+				<input type="hidden" name="action" value="cc_form">
+
+				<label for="date">Date:</label>
+				<input type="date" name="date" id="date" required /><br />
+
+				<label for="occasion">Occasion:</label>
+				<input type="text" name="occasion" id="occasion" required /><br />
+
+				<label for="post_title">Post Title:</label>
+				<input type="text" name="post_title" id="post_title" required /><br />
+
+				<label for="author">Author:</label>
+				<select name="author" id="author" required>
+					<?php
+					$users = get_users(array(
+						'fields' => array('ID', 'display_name')
+					));
+					foreach ($users as $user) {
+						echo '<option value="' . $user->ID . '">' . $user->display_name . '</option>';
+					}
+					?>
+				</select><br>
+
+				<label for="reviewer">Reviewer:</label>
+				<select name="reviewer" id="reviewer" required>
+					<?php
+					$admins = get_users(array(
+						'role' => 'administrator',
+						'fields' => array('ID', 'display_name')
+					));
+					foreach ($admins as $admin) {
+						echo '<option value="' . $admin->ID . '">' . $admin->display_name . '</option>';
+					}
+					?>
+				</select><br>
+
+				<?php submit_button('Schedule Post'); ?>
+
+			</form>
+		</div>
+
+	<?php
+	}
+
+
+
+	public function view_schedule_callback()
+	{
+	?>
+		<div class="wrap">
+			<h1 class="cc-title">Upcoming Scheduled Content</h1>
+
+			<?php
+
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'cc_data';
+
+			$data = $wpdb->get_results("SELECT * FROM $table_name WHERE date >= DATE(NOW()) ORDER BY date");
+
+			echo '<table class="wp-list-table widefat fixed striped table-view-list">';
+			echo '<thead><tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr></thead>';
+			foreach ($data as $row) {
+				echo '<tr>';
+				echo '<td>' . $row->id . '</td>';
+				echo '<td>' . $row->date . '</td>';
+				echo '<td>' . $row->occasion . '</td>';
+				echo '<td>' . $row->post_title . '</td>';
+				echo '<td>' . get_userdata($row->author)->user_login . '</td>';
+				echo '<td>' . get_userdata($row->reviewer)->user_login . '</td>';
+				echo '</tr>';
+			}
+			echo '</table>';
+
+
+			?>
+			<h1 class="cc-title">Deadline Closed Content</h1>
+
+	<?php
+
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'cc_data';
+
+		$data = $wpdb->get_results("SELECT * FROM $table_name WHERE date < DATE(NOW()) ORDER BY date DESC");
+
+		echo '<table class="wp-list-table widefat fixed striped table-view-list">';
+		echo '<thead><tr><th>ID</th><th>Date</th><th>Occasion</th><th>Post Title</th><th>Author</th><th>Reviewer</th></tr></thead>';
+		foreach ($data as $row) {
+			echo '<tr>';
+			echo '<td>' . $row->id . '</td>';
+			echo '<td>' . $row->date . '</td>';
+			echo '<td>' . $row->occasion . '</td>';
+			echo '<td>' . $row->post_title . '</td>';
+			echo '<td>' . get_userdata($row->author)->user_login . '</td>';
+			echo '<td>' . get_userdata($row->reviewer)->user_login . '</td>';
+			echo '</tr>';
+		}
+		echo '</table>';
+		echo '</div>';
+	}
+
+	public function content_calendar_callback()
+	{
+?>
+		<h1><?php esc_html_e(get_admin_page_title()); ?></h1>
+	<?php
+		$this->schedule_content_callback();
+		$this->view_schedule_callback();
+	}
 }
