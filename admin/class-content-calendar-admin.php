@@ -100,4 +100,34 @@ class Content_Calendar_Admin {
 
 	}
 
+	//Add Custom Menu Page
+function cc_add_menu_pages()
+{
+	add_menu_page(
+		__('Content Calendar', 'content-calendar'),
+		'Content Calendar',
+		'manage_options',
+		'content-calendar',
+		'content_calendar_callback',
+		'dashicons-calendar-alt',
+		6
+	);
+	add_submenu_page(
+		'content-calendar',
+		__('Schedule Content', 'content-calendar'),
+		__('Schedule Content', 'content-calendar'),
+		'manage_options',
+		'schedule-content',
+		'schedule_content_callback'
+	);
+	add_submenu_page(
+		'content-calendar',
+		__('View Schedule', 'content-calendar'),
+		__('View Schedule', 'content-calendar'),
+		'manage_options',
+		'view-schedule',
+		'view_schedule_callback'
+	);
+}
+
 }
