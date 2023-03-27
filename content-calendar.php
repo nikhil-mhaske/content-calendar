@@ -84,11 +84,9 @@ require plugin_dir_path(__FILE__) . 'includes/class-content-calendar.php';
  * @since    1.0.0
  */
 
-//enqueue CSS
-require plugin_dir_path(__FILE__) . 'scripts.php';
+
 
 //Create Database
-// Create a new database table
 function cc_create_table()
 {
 	global $wpdb;
