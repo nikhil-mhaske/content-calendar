@@ -24,7 +24,7 @@
         <input type="hidden" name="action" value="cc_form">
 
         <label for="date">Date:</label>
-        <input type="date" name="date" id="date" required /><br />
+        <input type="date" name="date" id="date" min="<?php echo date('Y-m-d'); ?>" required /><br />
 
         <label for="occasion">Occasion:</label>
         <input type="text" name="occasion" id="occasion" required /><br />
